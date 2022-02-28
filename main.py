@@ -8,6 +8,8 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, cur
 from forms import LoginForm, RegisterForm, EditForm
 from flask_gravatar import Gravatar
 import os
+from utils import *
+
 # from dotenv import load_dotenv
 #
 # load_dotenv()
@@ -143,6 +145,15 @@ def delete_user(user_id):
     db.session.delete(user_to_delete)
     db.session.commit()
     return redirect(url_for('get_all_posts'))
+
+
+@app.route('/async')
+def async_task():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    word_api, quote_api, kanye_api = asyncio.get_event_loop().run_until_complete(multiple_tasks())
+    parent_list = [word_api, quote_api, kanye_api]
+    return render_template("async.html", parent_list=parent_list)
 
 
 if __name__ == "__main__":
