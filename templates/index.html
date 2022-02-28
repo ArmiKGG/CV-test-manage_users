@@ -1,0 +1,62 @@
+{% include "header.html" %}
+
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('https://images.unsplash.com/photo-1470092306007-055b6797ca72?ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            <h1>Arman Karapetyan</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        {% if current_user.role == 'admin': %}
+              <div class="clearfix">
+                <a class="btn btn-primary float-left" href="{{url_for('register')}}">Create New User</a>
+              </div>
+            {% endif %}
+        <hr>
+        {% if current_user.role == 'admin': %}
+        {% for user in users %}
+        <div>
+          <span style="font-size: 1.2em;">Username: </span><code>{{user.username}}</code></br>
+          <span style="font-size: 1.2em;">Password: </span><code>{{user.password}}</code></br>
+          <span style="font-size: 1.2em;">Role: </span><code>{{user.role}}</code></br>
+          <div class="clearfix">
+              <a class= "btn btn-primary" href="{{url_for('edit_user', user_id=user.id) }}">Manage User</a>
+          </div>
+          <div class="clearfix" style="padding-top: 12px;">
+                <a class="btn btn-primary float-left" href="{{url_for('delete_user', user_id=user.id)}}">Delete USer</a>
+          </div>
+        <hr>
+
+        {% endfor %}
+        {% else %}
+        <div>
+          {% if current_user.username %}
+          <h3>Undefined - log in as admin to access this data</h3>
+            <h4>Current user {{current_user.username}} has a {{current_user.role}} role</h4>
+          {% else %}
+          <h4>Log in first</h4>
+          {% endif %}
+          <div class="clearfix" style="padding-top: 12px;">
+                <a class="btn btn-primary float-left" href="{{url_for('login')}}">Log in</a>
+          </div>
+          </div>
+            {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <hr>
+
+{% include "footer.html" %}
